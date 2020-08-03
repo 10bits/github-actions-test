@@ -27,4 +27,4 @@ jobs:
         echo ${{ github.repository_owner }}
         echo ${{ github.event_name }}
         echo ${{ github.actor }}
-        echo ${{ toJson(github.event) }}
+        echo ${{ toJSON(github.event) }}

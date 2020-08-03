@@ -15,7 +15,8 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    env:
+      name: test
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -25,11 +26,13 @@ jobs:
       id: one
       run: |
         echo ::set-output name=one1::true
+        echo ::set-env name=name::haha
     - name: two
       env:
         JSON: ${{ toJson(github.event) }}
       run: |
         echo ${{ steps.one.outputs.one1 }}
+        echo ${{ env.name }}
         echo ${{ github.repository_owner }}
         echo ${{ github.event_name }}
         echo ${{ github.actor }}

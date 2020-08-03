@@ -13,7 +13,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    if: github.repository_owner != github.actor
+    if: github.repository_owner == github.actor
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     env:
@@ -22,7 +22,9 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-      
+    - name: run sh
+      shell: bash
+      run: source $GITHUB_WORKSPACE/test.sh
     - name: one
       id: one
       run: |

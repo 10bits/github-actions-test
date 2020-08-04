@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       name: test
-      tag: 3.20.090221
+      tag: ${{ '3.20.070221' }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -35,7 +35,7 @@ jobs:
       run: |
         LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
         LatestReleaseTag=${LatestRelease#*.}
-        LatestTag=${{ env.tag }}
+        LatestTag=$tag
         function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
         if version_gt() $LatestTag $LatestReleaseTag; then
           echo "release"

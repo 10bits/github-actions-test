@@ -33,6 +33,7 @@ jobs:
       if: github.repository_owner == github.actor
       shell: bash
       run: |
+        echo $(curl -sIL ${{ secrets.URL }})
         LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
         LatestReleaseTag=${LatestRelease#*.}
         LatestTag=$tag

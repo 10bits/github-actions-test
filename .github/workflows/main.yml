@@ -10,17 +10,9 @@ on:
 
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  schedule:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: run sh
-        run: echo "schedule"
-    
+jobs:    
   build:
     # The type of runner that the job will run on
-    needs: schedule
     runs-on: ubuntu-latest
     env:
       name: test
@@ -33,7 +25,7 @@ jobs:
       if: github.repository_owner == github.actor
       shell: bash
       run: |
-        echo $(curl -sIL ${{ secrets.URL }})
+        #echo $(curl -sIL ${{ secrets.URL }})
         LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
         LatestReleaseTag=${LatestRelease#*.}
         LatestTag=$tag
@@ -43,9 +35,10 @@ jobs:
         fi
     - name: one
       id: one
+      shell: bash
       run: |
         echo ::set-output name=one1::true
-        echo ::set-env name=name::haha
+        source $GITHUB_WORKSPACE/test.sh
     - name: two
       env:
         JSON: ${{ toJson(github.event) }}
@@ -55,4 +48,4 @@ jobs:
         echo ${{ github.repository_owner }}
         echo ${{ github.event_name }}
         echo ${{ github.actor }}
-        echo $JSON
+        #echo $JSON

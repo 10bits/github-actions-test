@@ -44,6 +44,7 @@ jobs:
         JSON: ${{ toJson(github.event) }}
       run: |
         echo ${{ steps.one.outputs.one1 }}
+        echo ${{ env.git_url }}
         echo ${{ env.name }}
         echo ${{ github.repository_owner }}
         echo ${{ github.event_name }}

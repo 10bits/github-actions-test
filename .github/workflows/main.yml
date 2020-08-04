@@ -28,10 +28,6 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
-    - name: install
-      run: |
-        sudo apt-get update
-        sudo apt-get -y install curl jq
     - name: run sh
       if: github.repository_owner == github.actor
       shell: bash

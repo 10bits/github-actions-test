@@ -35,7 +35,7 @@ jobs:
       run: |
         LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
         LatestReleaseTag=${LatestRelease#*.}
-        LatestTag=$tag
+        LatestTag=${{ env.tag }}
         function version_gt() { test "$(echo "$@" | tr " " "\n" | sort -V | head -n 1)" != "$1"; }
         if version_gt() $LatestTag $LatestReleaseTag; then
           echo "release"

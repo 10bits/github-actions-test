@@ -32,9 +32,8 @@ jobs:
       if: github.repository_owner == github.actor
       shell: bash
       run: |
-        LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name)
-        LatestRelease=${LatestRelease#*.}
-        echo ${LatestRelease%"*}
+        LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
+        echo ${LatestRelease#*.}
     - name: one
       id: one
       run: |

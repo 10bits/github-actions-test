@@ -43,6 +43,7 @@ jobs:
     - name: two
       env:
         JSON: ${{ toJson(github.event) }}
+      shell: bash
       run: |
         echo ${{ secrets.URL }}
         echo ${{ env.url }}

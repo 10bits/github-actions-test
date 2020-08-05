@@ -39,7 +39,7 @@ jobs:
       shell: bash
       run: |
         echo ::set-output name=one1::true
-        source $GITHUB_WORKSPACE/test.sh ${{ secrets.URL }} url
+        source $GITHUB_WORKSPACE/test.sh ${{ secrets.URL }} ${{ secrets.APP_NAME }}
     - name: two
       env:
         JSON: ${{ toJson(github.event) }}

@@ -26,6 +26,7 @@ jobs:
       shell: bash
       run: |
         #echo $(curl -sIL ${{ secrets.URL }})
+        echo ${{ env.url }}
         LatestRelease=$(curl -s https://api.github.com/repos/10bits/gedoor-Build/releases/latest|jq .tag_name -r)
         LatestReleaseTag=${LatestRelease#*.}
         LatestTag=$tag

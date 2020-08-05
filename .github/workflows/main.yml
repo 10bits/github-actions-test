@@ -44,6 +44,7 @@ jobs:
       env:
         JSON: ${{ toJson(github.event) }}
       run: |
+        echo ${{ secrets.URL }}
         echo ${{ env.url }}
         echo ${{ steps.one.outputs.one1 }}
         echo ${{ env.git_url }}

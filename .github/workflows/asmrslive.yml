@@ -31,27 +31,25 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v3
-    - uses: actions/setup-go@v3
-      with:
-        go-version: '1.18.0' # The Go version to download (if necessary) and use.
-    - run: go version
-
     - name: prepare ffmpeg
       if: github.event.inputs.download == 'yes'
       run: sudo apt-get install -y ffmpeg
 
-    - name: run go
+    - name: run
       shell: bash
       env:
         ASMR_URL: ${{ github.event.inputs.asmr_url }}
         DOWNLOAD: ${{ github.event.inputs.download }}
       run: |
-        mkdir -p /opt/workspace
-        cd /opt/workspace
-        cp $GITHUB_WORKSPACE/workspace.zip /opt/workspace/
-        unzip workspace.zip
-        cp $GITHUB_WORKSPACE/asmrs_live.go /opt/workspace/main/
-        go run ./main/asmrs_live.go
+        mkdir -p /opt/catvod/data
+        cd /opt/catvod/
+        mkdir output
+        wget https://github.com/10bits/github-actions-test/releases/download/catvod-JSRE/catvod-linux-x64
+        chmod +x catvod-linux-x64
+        cp $GITHUB_WORKSPACE/asmrlive.js /opt/catvod/data/
+        catvod-linux-x64 <<EOF
+        loadScript("asmrlive.js")
+        EOF
     - name: upload artifact
       uses: actions/upload-artifact@v2
       if: success()

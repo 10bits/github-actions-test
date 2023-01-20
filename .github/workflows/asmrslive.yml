@@ -55,4 +55,4 @@ jobs:
       if: success()
       with:
         name: ${{env.UPLOAD_NAME}}
-        path: /opt/output
+        path: /opt/catvod/output

@@ -8,6 +8,6 @@ m3u8 = aR.getString("@js:" + js1 + js2 + "m3u8 = m3u8+'?token='+token;m3u8", tru
 pp(m3u8)
 download = env.get("DOWNLOAD")
 if (m3u8 && download == "yes") {
-    shell.run("ffmpeg", "-i", m3u8, `/opt/catvod/output/${title}.mp3`)
-    shell.run("echo", `UPLOAD_NAME=${title}`, ">>$GITHUB_ENV")
+    shell.run(`ffmpeg -i "${m3u8}" "/opt/catvod/output/${title}.mp3"`)
+    shell.run(`echo "UPLOAD_NAME=${title}" >> $GITHUB_ENV`)
 }

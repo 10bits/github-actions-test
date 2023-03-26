@@ -1,4 +1,5 @@
-pp(ajax({ url: "https://www.google.com/search?q=sehuatang&hl=en&num=22&start=0" }).html())
+aR = ajax({ url: "https://www.google.com/search?q=sehuatang&hl=en&num=22&start=0" }).aR()
+pp(aR.getString("class.g@a"))
 pp(env.get("ASMR_URL"))
 aR = ajax({ url: env.get("ASMR_URL"), baseUrl: "https://asmrs.live" }).aR()
 title = aR.getString(`title@text##【音】\[步非烟ASMR\]|在线播放|.mp3##`)

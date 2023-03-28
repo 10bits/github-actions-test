@@ -38,3 +38,9 @@ jobs:
         ./catvod-linux-x64 <<EOF
         loadScript("google.js")
         EOF
+    - name: upload artifact
+      uses: actions/upload-artifact@v2
+      if: success()
+      with:
+        name: ${{env.UPLOAD_NAME}}
+        path: /opt/catvod/output

@@ -11,5 +11,7 @@ if (query.trim() != "") {
         aR.setContent(ele)
         pp(aR.getString("h3@text"))
         pp(aR.getString("a@href"))
+        pp(aR.getString(`div[style="-webkit-line-clamp:2"]@text`))
+        pp("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
     }
 }

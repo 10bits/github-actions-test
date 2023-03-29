@@ -1,7 +1,7 @@
 query = env.get("QUERY")
 pp(query)
 if (query.trim() != "") {
-    res = ajax({ url: `https://www.google.com/search?q=${query}&hl=en&num=22&start=0` })
+    res = ajax({ url: `https://www.google.com/search?q=${query}&hl=en&num=52&start=0` })
     aR = res.aR()
     saveFile("/opt/catvod/output/res.html", res.html())
     title = "google"

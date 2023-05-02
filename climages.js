@@ -8,8 +8,9 @@ for (let url of urls) {
   let result = aR.getString("class.tpc_cont@img@ess-data")
   pp(title)
   pp(result)
-  saveFile("/opt/urls.txt", result)
-  shell.run("wget -i /opt/urls.txt -P /opt/catvod/output")
-  shell.run("rm /opt/urls.txt")
+  let output_dir=`/opt/catvod/output/${title}`
+  shell.run(`mkdir -p ${output_dir}`)
+  saveFile(`${output_dir}/urls.txt`, result)
+  shell.run(`wget -i ${output_dir}/urls.txt -P ${output_dir}`)
 }
 shell.run(`echo "UPLOAD_NAME=CLImages" >> $GITHUB_ENV`)

@@ -8,7 +8,7 @@ for (let url of urls) {
   let result = aR.getString("class.tpc_cont@img@ess-data")
   pp(title)
   pp(result)
-  let output_dir=`/opt/catvod/output/${title}`
+  let output_dir=`/opt/catvod/output/"${title}"`
   shell.run(`mkdir -p ${output_dir}`)
   saveFile(`${output_dir}/urls.txt`, result)
   shell.run(`wget -i ${output_dir}/urls.txt -P ${output_dir}`)

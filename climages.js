@@ -12,7 +12,7 @@ for (let url of urls) {
   shell.run(`mkdir -p ${output_dir}`)
   saveFile(`/opt/urls.txt`, result)
   shell.run(`wget -i /opt/urls.txt -P ${output_dir}`)
-  shell.run(`zip -r "${title}".zip ${output_dir}`)
+  shell.run(`zip -r /opt/catvod/output/"${title}".zip ${output_dir}`)
   shell.run(`rm -rf ${output_dir}`)
   shell.run("rm /opt/urls.txt")
   

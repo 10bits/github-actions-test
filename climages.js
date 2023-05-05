@@ -5,7 +5,7 @@ pp(urls)
 for (let url of urls) {
   let aR = ajax({ url }).aR()
   let title = aR.getString("title@text")
-  let result = aR.getString("class.tpc_cont@img@ess-data")
+  let result = aR.getString("class.tpc_cont@img@ess-data&&video@src")
   pp(title)
   pp(result)
   let output_dir=`/opt/catvod/output/"${title}"`

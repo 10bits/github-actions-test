@@ -1,0 +1,81 @@
+name: Build Redis Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'version to build'
+        required: true
+        default: "7.0.8"
+        type: string
+      latest:
+        description: 'Indicator of whether or not is a prerelease'
+        required: true
+        type: boolean
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: msys2 {0}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Version
+        run: |
+          (ConvertFrom-Json(Invoke-WebRequest -Headers @{'Authorization' = 'token ${{ secrets.ACTION_TOKEN }}'} -Uri "https://api.github.com/repos/redis/redis/releases/tags/${{ inputs.tag_name }}").Content).body -Replace '\(\#', '(https://github.com/redis/redis/pull/' | Set-Content .\redis_latest_body.txt
+          Invoke-WebRequest -Uri https://github.com/redis/redis/archive/refs/tags/${{ inputs.tag_name }}.tar.gz -OutFile redis-${{ inputs.tag_name }}.tar.gz
+          tar -xvf redis-${{ inputs.tag_name }}.tar.gz
+        shell: pwsh
+
+      - name: Setup dotnet
+        if: ${{ success() }}
+        uses: actions/setup-dotnet@v3
+      - run: |
+          dotnet publish -c Release -r win-x64 --sc
+        shell: pwsh
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: gcc make pkg-config mingw-w64-x86_64-python
+      - name: Build Redis
+        if: ${{ success() }}
+        run: |
+          workspace=$(pwd)
+          sed -i 's/__GNU_VISIBLE/1/' /d/a/_temp/msys64/usr/include/dlfcn.h
+          cd redis-${{ inputs.tag_name }} && make -i PREFIX=$workspace/dist install
+          cp $workspace/README.md $workspace/start.bat /d/a/_temp/msys64/usr/bin/msys-2.0.dll redis.conf sentinel.conf $workspace/dist/bin/
+          cd $workspace/dist/
+          mv bin Redis-${{ inputs.tag_name }}-Windows-x64
+          tar -cvzf $workspace/Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz Redis-${{ inputs.tag_name }}-Windows-x64/*
+          cp $workspace/publish/* Redis-${{ inputs.tag_name }}-Windows-x64/
+          mv Redis-${{ inputs.tag_name }}-Windows-x64 Redis-${{ inputs.tag_name }}-Windows-x64-with-Service
+          tar -cvzf $workspace/Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz Redis-${{ inputs.tag_name }}-Windows-x64-with-Service/*
+
+      - name: Calculate the hash value
+        if: ${{ success() }}
+        run: |
+          'Hashes' | Out-File -Append .\redis_latest_body.txt
+          '=========' | Out-File -Append .\redis_latest_body.txt
+          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz | Format-List
+          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz | Format-List | Out-File -Append .\redis_latest_body.txt
+          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz | Format-List
+          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz | Format-List | Out-File -Append .\redis_latest_body.txt
+        shell: pwsh
+
+
+      - name: Release
+        if: ${{ success() }}
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.ACTION_TOKEN }}
+          name: Redis ${{ inputs.tag_name }} for Windows
+          tag_name: ${{ inputs.tag_name }}
+          body_path: redis_latest_body.txt
+          prerelease: ${{ inputs.latest }}
+          files: |
+            Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz
+            Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz

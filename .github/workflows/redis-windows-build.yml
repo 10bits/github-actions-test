@@ -8,11 +8,6 @@ on:
         required: true
         default: "7.0.8"
         type: string
-      latest:
-        description: 'Indicator of whether or not is a prerelease'
-        required: true
-        type: boolean
-
 jobs:
   build:
     runs-on: windows-latest
@@ -66,16 +61,9 @@ jobs:
           Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz | Format-List | Out-File -Append .\redis_latest_body.txt
         shell: pwsh
 
-
-      - name: Release
-        if: ${{ success() }}
-        uses: softprops/action-gh-release@v1
+      - uses: actions/upload-artifact@v3
         with:
-          token: ${{ secrets.ACTION_TOKEN }}
-          name: Redis ${{ inputs.tag_name }} for Windows
-          tag_name: ${{ inputs.tag_name }}
-          body_path: redis_latest_body.txt
-          prerelease: ${{ inputs.latest }}
-          files: |
+          name: ${{ inputs.tag_name }}
+          path: |
             Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz
             Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz

@@ -20,7 +20,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Version
         run: |
-          (ConvertFrom-Json(Invoke-WebRequest -Headers @{'Authorization' = 'token ${{ secrets.ACTION_TOKEN }}'} -Uri "https://api.github.com/repos/redis/redis/releases/tags/${{ inputs.tag_name }}").Content).body -Replace '\(\#', '(https://github.com/redis/redis/pull/' | Set-Content .\redis_latest_body.txt
           Invoke-WebRequest -Uri https://github.com/redis/redis/archive/refs/tags/${{ inputs.tag_name }}.tar.gz -OutFile redis-${{ inputs.tag_name }}.tar.gz
           tar -xvf redis-${{ inputs.tag_name }}.tar.gz
         shell: pwsh
@@ -42,28 +41,13 @@ jobs:
           workspace=$(pwd)
           sed -i 's/__GNU_VISIBLE/1/' /d/a/_temp/msys64/usr/include/dlfcn.h
           cd redis-${{ inputs.tag_name }} && make -i PREFIX=$workspace/dist install
-          cp $workspace/README.md $workspace/start.bat /d/a/_temp/msys64/usr/bin/msys-2.0.dll redis.conf sentinel.conf $workspace/dist/bin/
+          cp /d/a/_temp/msys64/usr/bin/msys-2.0.dll redis.conf sentinel.conf $workspace/dist/bin/
           cd $workspace/dist/
           mv bin Redis-${{ inputs.tag_name }}-Windows-x64
           tar -cvzf $workspace/Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz Redis-${{ inputs.tag_name }}-Windows-x64/*
-          cp $workspace/publish/* Redis-${{ inputs.tag_name }}-Windows-x64/
-          mv Redis-${{ inputs.tag_name }}-Windows-x64 Redis-${{ inputs.tag_name }}-Windows-x64-with-Service
-          tar -cvzf $workspace/Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz Redis-${{ inputs.tag_name }}-Windows-x64-with-Service/*
-
-      - name: Calculate the hash value
-        if: ${{ success() }}
-        run: |
-          'Hashes' | Out-File -Append .\redis_latest_body.txt
-          '=========' | Out-File -Append .\redis_latest_body.txt
-          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz | Format-List
-          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz | Format-List | Out-File -Append .\redis_latest_body.txt
-          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz | Format-List
-          Get-FileHash .\Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz | Format-List | Out-File -Append .\redis_latest_body.txt
-        shell: pwsh
 
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ inputs.tag_name }}
           path: |
             Redis-${{ inputs.tag_name }}-Windows-x64.tar.gz
-            Redis-${{ inputs.tag_name }}-Windows-x64-with-Service.tar.gz

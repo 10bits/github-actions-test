@@ -63,7 +63,7 @@ jobs:
       if: github.event.inputs.download == 'yes'
       shell: bash
       env:
-        url: ${{steps.m3u8.outputs.m3u8}}
+        url: ${{steps.m3u8.outputs.m3u8_url}}
         output: ${{env.UPLOAD_NAME}}
       run: |
         ffmpeg -i "$url" "/opt/catvod/output/$output"

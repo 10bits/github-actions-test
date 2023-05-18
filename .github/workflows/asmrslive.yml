@@ -63,10 +63,10 @@ jobs:
       if: github.event.inputs.download == 'yes'
       shell: bash
       env:
-        URL: ${{steps.m3u8.outputs.m3u8}}
-        OUT: ${{env.UPLOAD_NAME}}
+        url: ${{steps.m3u8.outputs.m3u8}}
+        output: ${{env.UPLOAD_NAME}}
       run: |
-        ffmpeg -i "$URL" "/opt/catvod/output/$OUT"
+        ffmpeg -i "$url" "/opt/catvod/output/$output"
     - name: upload artifact
       uses: actions/upload-artifact@v2
       if: success()

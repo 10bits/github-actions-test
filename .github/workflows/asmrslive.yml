@@ -44,6 +44,7 @@ jobs:
         sudo apt-get install -y ffmpeg
 
     - name: run
+      id: m3u8
       shell: bash
       env:
         ASMR_URL: ${{ github.event.inputs.asmr_url }}
@@ -58,6 +59,14 @@ jobs:
         ./catvod-linux-x64 <<EOF
         loadScript("asmrlive.js")
         EOF
+    - name: download m3u8
+      if: github.event.inputs.download == 'yes'
+      shell: bash
+      env:
+        URL: ${{steps.m3u8.outputs.m3u8}}
+        OUT: ${{env.UPLOAD_NAME}}
+      run: |
+        ffmpeg -i "$URL" "/opt/catvod/output/$OUT"
     - name: upload artifact
       uses: actions/upload-artifact@v2
       if: success()

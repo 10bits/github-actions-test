@@ -30,6 +30,7 @@ jobs:
         run: |
           GOOS=windows GOARCH=amd64 make build
           ls
+          
       - name: upload artifact
         uses: actions/upload-artifact@v2
         if: success()

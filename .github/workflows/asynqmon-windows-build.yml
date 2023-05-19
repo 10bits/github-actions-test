@@ -10,7 +10,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          repository: hibiken/asynqmon
+          repository: 10bits/asynqmon
           ref: "v0.7.1"
           fetch-depth: 0
       - name: Set up Go

@@ -25,6 +25,7 @@ jobs:
 
       - name: Install NPM packages
         run: cd ui && rm yarn.lock && yarn install
+        
       - name: Build Release Binary
         run: |
           GOOS=windows GOARCH=amd64 make build

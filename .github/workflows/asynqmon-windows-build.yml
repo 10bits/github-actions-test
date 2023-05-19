@@ -23,7 +23,12 @@ jobs:
           node-version: "16"
 
       - name: Install NPM packages
-        run: cd ui && rm yarn.lock && yarn install
+        run: |
+          cd ui 
+          rm yarn.lock
+          yarn add @types/react@latest @types/react-dom@latest --dev
+          yarn add react@latest react-dom@latest
+          yarn install
         
       - name: Build Release Binary
         run: |

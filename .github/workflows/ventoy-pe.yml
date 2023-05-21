@@ -25,7 +25,7 @@ jobs:
           mkdir /opt/ventoy
           sudo qemu-img create -f vhdx /opt/ventoy/ventoy.vhdx 888M
           sudo modprobe nbd max_part=8
-          sudo qemu-nbd -c /dev/nbd0 /opt/ventoy/ventoy.vhdx
+          sudo qemu-nbd -f vhdx -c /dev/nbd0 /opt/ventoy/ventoy.vhdx
           ls /dev/ | grep nbd 
           fdisk -l /dev/nbd0
           wget https://github.com/ventoy/Ventoy/releases/download/v1.0.91/ventoy-1.0.91-linux.tar.gz

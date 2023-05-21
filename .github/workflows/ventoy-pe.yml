@@ -20,7 +20,8 @@ jobs:
       - name: install
         shell: bash
         run: |
-          sudo apt install qemu-utils -y
+          sudo apt-get update
+          sudo apt-get install qemu-utils -y
           mkdir /opt/ventoy
           sudo qemu-img create -f raw /opt/ventoy/ventoy.img 888M
           sudo modprobe nbd max_part=8

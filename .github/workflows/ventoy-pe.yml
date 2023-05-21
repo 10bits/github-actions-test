@@ -20,12 +20,11 @@ jobs:
       - name: install
         shell: bash
         run: |
-          sudo apt-get update
           sudo apt-get install qemu-utils -y
           mkdir /opt/ventoy
-          sudo qemu-img create -f raw /opt/ventoy/ventoy.img 888M
+          sudo qemu-img create -f vhdx /opt/ventoy/ventoy.vhdx 888M
           sudo modprobe nbd max_part=8
-          sudo qemu-nbd -c /dev/nbd0 /opt/ventoy/ventoy.img
+          sudo qemu-nbd -c /dev/nbd0 /opt/ventoy/ventoy.vhdx
           wget https://github.com/ventoy/Ventoy/releases/download/v1.0.91/ventoy-1.0.91-linux.tar.gz
           tar zxvf ventoy-1.0.91-linux.tar.gz
           cd ventoy-1.0.91-linux

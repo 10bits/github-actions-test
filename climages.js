@@ -8,6 +8,7 @@ for (let url of urls) {
   let result = aR.getString("class.tpc_cont@img@ess-data")
   pp(title)
   pp(result)
+  title=title.replace("?","-")
   let output_dir=`/opt/catvod/output/"${title}"`
   shell.run(`mkdir -p ${output_dir}`)
   saveFile(`/opt/urls.txt`, result)

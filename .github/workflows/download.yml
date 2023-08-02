@@ -37,7 +37,7 @@ jobs:
           mkdir -p /opt/download
           cd /opt/download
           wget $download_url
-          find ./ -type f -print|xargs sha256sum
+          # find ./ -type f -print|xargs sha256sum
           
       - name: upload artifact
         uses: actions/upload-artifact@v2

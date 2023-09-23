@@ -33,9 +33,9 @@ jobs:
 
       - name: Clone Memos
         env:
-         TAG: ${{ github.event.inputs.tag }}
+         BRANCH: ${{ github.event.inputs.branch }}
         run: |
-          git clone -b $TAG https://github.com/usememos/memos.git
+          git clone -b $BRANCH https://github.com/usememos/memos.git
           
       - name: Setup Node.js
         uses: actions/setup-node@v2

@@ -6,7 +6,7 @@ on:
       tag: 
         description: 'memos tag'      
         required: true 
-        default: 'release/0.14.4'
+        default: '0.14.4'
 
 jobs:
   build-artifacts:

@@ -3,10 +3,10 @@ name: Build Memos
 on:
   workflow_dispatch:
     inputs: 
-      tag: 
-        description: 'memos tag'      
+      branch: 
+        description: 'memos branch'      
         required: true 
-        default: '0.14.4'
+        default: 'release/0.14.4'
 
 jobs:
   build-artifacts:
@@ -34,8 +34,9 @@ jobs:
       - name: Clone Memos
         env:
          TAG: ${{ github.event.inputs.tag }}
-        run: git clone https://github.com/usememos/memos.git && git checkout $TAG
-
+        run: |
+          git clone -b $TAG https://github.com/usememos/memos.git
+          
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:

@@ -32,10 +32,18 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Clone Memos
+        if: matrix.os != 'windows-latest'
         env:
          BRANCH: ${{ github.event.inputs.branch }}
         run: |
           git clone -b $BRANCH https://github.com/usememos/memos.git
+
+      - name: Clone Memos Windows
+        if: matrix.os == 'windows-latest'
+        env:
+         BRANCH: ${{ github.event.inputs.branch }}
+        run: |
+          git clone -b $env:BRANCH https://github.com/usememos/memos.git
           
       - name: Setup Node.js
         uses: actions/setup-node@v2
@@ -84,10 +92,10 @@ jobs:
       - name: Build backend
         run: |
           cd memos
-          go build -o memos-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./main.go
+          go build -o memos${{ matrix.os == 'windows-latest' && '.exe' || '' }} ./main.go
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: memos-binary-${{ matrix.os }}-${{ matrix.goarch }}
-          path: memos/memos-${{ matrix.goos }}-${{ matrix.goarch }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+          path: memos/memos${{ matrix.os == 'windows-latest' && '.exe' || '' }}

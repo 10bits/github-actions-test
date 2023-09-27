@@ -38,6 +38,10 @@ jobs:
         run: |
           git clone -b $BRANCH https://github.com/usememos/memos.git
           
+      - uses: bufbuild/buf-setup-action@v1
+      - run: buf generate
+        working-directory: memos/proto
+        
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:

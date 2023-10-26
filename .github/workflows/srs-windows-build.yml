@@ -6,7 +6,7 @@ on:
       tag_name:
         description: 'version to build'
         required: true
-        default: "v5.0-b6"
+        default: "5.0-b6"
         type: string
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Version
         run: |
-          Invoke-WebRequest -Uri https://github.com/ossrs/srs/archive/refs/tags/${{ inputs.tag_name }}.tar.gz -OutFile srs-${{ inputs.tag_name }}.tar.gz
+          Invoke-WebRequest -Uri https://github.com/ossrs/srs/archive/refs/tags/v${{ inputs.tag_name }}.tar.gz -OutFile srs-${{ inputs.tag_name }}.tar.gz
           tar -xvf srs-${{ inputs.tag_name }}.tar.gz
         shell: pwsh
 
@@ -32,8 +32,9 @@ jobs:
         if: ${{ success() }}
         run: |
           workspace=$(pwd)
+          mkdir dist
           cd srs-${{ inputs.tag_name }}/trunk
-          ./configure --full
-          make
-          cp /d/a/_temp/msys64/usr/bin/msys-2.0.dll ./objs
-          tar -cvzf $workspace/SRS-${{ inputs.tag_name }}-Windows-x64.tar.gz ./*
+          ./configure --full --prefix=$workspace/dist
+          make install
+          cp /d/a/_temp/msys64/usr/bin/msys-2.0.dll $workspace/dist/objs
+          tar -cvzf $workspace/SRS-${{ inputs.tag_name }}-Windows-x64.tar.gz $workspace/dist/*

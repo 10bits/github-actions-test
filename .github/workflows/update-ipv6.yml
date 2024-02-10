@@ -50,4 +50,4 @@ jobs:
         git config user.email github-actions@github.com
         git add .
         git commit -m "ipv6 update"
-        git push origin master:master
+        git push origin :refs/heads/master

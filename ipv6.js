@@ -8,8 +8,8 @@ function stringToUint8Array(str) {
     var tmpUint8Array = new Uint8Array(arr);
     return tmpUint8Array
 }
-pp(env.get("CHACHA20KEY"))
-pp(env.get("CHACHA20NONCE"))
+pp(Base64.encode(env.get("CHACHA20KEY")))
+pp(Base64.encode(env.get("CHACHA20NONCE")))
 const key=stringToUint8Array(env.get("CHACHA20KEY"))
 const nonce=stringToUint8Array(env.get("CHACHA20NONCE"))
 const message=stringToUint8Array(env.get("IPV6"))

@@ -7,8 +7,8 @@ name: Update IPv6
 on:
   workflow_dispatch:
     inputs: 
-      url: 
-        description: 'ipv6'      
+      ipv6: 
+        description: 'IPv6'      
         required: true 
         default: ''
 
@@ -29,8 +29,8 @@ jobs:
       shell: bash
       env:
         IPV6: ${{ github.event.inputs.ipv6 }}
-        CHACHA20KEY: ${{ secrets.chacha20key }}
-        CHACHA20NONCE: ${{ secrets.chacha20nonce }}
+        CHACHA20KEY: ${{ secrets.CHACHA20KEY }}
+        CHACHA20NONCE: ${{ secrets.CHACHA20NONCE }}
       run: |
         mkdir -p /opt/catvod/data
         cd /opt/catvod/

@@ -46,10 +46,8 @@ jobs:
       shell: bash
       run: |
         echo $ipv6>ipv6.md 
-        git branch
-        git checkout master && git pull
         git config user.name  github-actions
         git config user.email github-actions@github.com
         git add .
         git commit -m "ipv6 update"
-        git push origin master
+        git push

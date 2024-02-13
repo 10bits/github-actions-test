@@ -34,7 +34,7 @@ jobs:
         mkdir output
         wget https://github.com/10bits/github-actions-test/releases/download/catvod-JSRE/catvod-linux-x64
         chmod +x ./catvod-linux-x64
-        cp $GITHUB_WORKSPACE/google.js /opt/catvod/data/
+        cp $GITHUB_WORKSPACE/js/google.js /opt/catvod/data/
         ./catvod-linux-x64 <<EOF
         loadScript("google.js")
         EOF

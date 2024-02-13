@@ -55,7 +55,7 @@ jobs:
         mkdir output
         wget https://github.com/10bits/github-actions-test/releases/download/catvod-JSRE/catvod-linux-x64
         chmod +x ./catvod-linux-x64
-        cp $GITHUB_WORKSPACE/asmrlive.js /opt/catvod/data/
+        cp $GITHUB_WORKSPACE/js/asmrlive.js /opt/catvod/data/
         ./catvod-linux-x64 <<EOF
         loadScript("asmrlive.js")
         EOF

@@ -48,8 +48,9 @@ jobs:
         loadScript("climages.js")
         EOF
     - name: upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       if: success()
       with:
         name: ${{env.UPLOAD_NAME}}
         path: /opt/catvod/output
+        retention-days: 1

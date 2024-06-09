@@ -36,6 +36,8 @@ jobs:
       env:
         URL: ${{ github.event.inputs.url }}
       run: |
+        cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+        ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
         mkdir -p /opt/catvod/data
         cd /opt/catvod/
         mkdir output

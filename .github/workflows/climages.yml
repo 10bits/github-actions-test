@@ -5,17 +5,15 @@ name: climages
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-#   schedule:
-#     - cron: '0 3 * * *'
-  # watch:
-  #   types: [started]
   workflow_dispatch:
     inputs: 
       url: 
         description: 'url'      
         required: true 
         default: 'https://cl.6939x.xyz/htm_mob/2302/7/5542122.html'
-
+env:
+  TZ: Asia/Shanghai
+  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"

@@ -25,8 +25,18 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
+    - name: Add the custom timezone database file
+      run: |
+        sudo mkdir -p /usr/share/zoneinfo/Asia
+        sudo cp /tmp/Asia/Shanghai /usr/share/zoneinfo/Asia/
+        sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
+    - name: Show the timezone
+      run: |
+        echo "The timezone is $TZ"
+        date
+    - uses: actions/checkout@v3
+    
     - name: run
       shell: bash
       env:

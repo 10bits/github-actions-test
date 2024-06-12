@@ -47,10 +47,20 @@ jobs:
         ./catvod-linux-x64 <<EOF
         loadScript("climages.js")
         EOF
+    - name: download
+      shell: bash
+      run: |
+        for url in /opt/urls/*.txt; do
+          filename=$(basename "$url" .txt)
+          output_dir=/opt/output/$filename
+          mkdir -p "$output_dir"
+          wget --timestamping -i "$url" -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
+          zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
+        done
     - name: upload artifact
       uses: actions/upload-artifact@v4
       if: success()
       with:
         name: ${{env.UPLOAD_NAME}}
-        path: /opt/urls
+        path: /opt/output/*.zip
         retention-days: 1

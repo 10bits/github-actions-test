@@ -51,13 +51,13 @@ jobs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install axel
+        sudo apt-get install axel parallel
         for url in /opt/urls/*.txt; do
           filename=$(basename "$url" .txt)
           output_dir=/opt/output/$filename
           mkdir -p "$output_dir"
           #wget --timestamping -i "$url" -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
-          cat "$url"|xargs -L 1 axel -a -n 10 --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -o "${output_dir}"
+          cat "$url"|parallel -j 4 axel -q -n 4 --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -o "${output_dir}" {}
           zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
         done
     - name: upload artifact

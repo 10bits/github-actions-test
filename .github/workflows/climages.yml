@@ -56,7 +56,7 @@ jobs:
           output_dir=/opt/output/$filename
           mkdir -p "$output_dir"
           #wget --timestamping -i "$url" -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
-          cat "$url"|xargs -L 1 axel -a -n 5 --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -o "${output_dir}"
+          cat "$url"|xargs -L 1 axel -q -n 5 --user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -o "${output_dir}"
           zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
         done
     - name: upload artifact

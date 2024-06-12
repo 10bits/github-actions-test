@@ -14,6 +14,9 @@ for (let url of urls) {
   pp(title)
   pp(result)
   let filename = replaceIllegalCharacters(title)
+  if(filename.trim()==''){
+    continue
+  }
   // let output_dir = `/opt/catvod/output/"${filename}"`
   // shell.run(`mkdir -p ${output_dir}`)
   shell.run(`mkdir -p /opt/urls`)

@@ -50,6 +50,7 @@ jobs:
     - name: download
       shell: bash
       run: |
+        apt install axel
         for url in /opt/urls/*.txt; do
           filename=$(basename "$url" .txt)
           output_dir=/opt/output/$filename

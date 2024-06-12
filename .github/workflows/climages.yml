@@ -52,5 +52,5 @@ jobs:
       if: success()
       with:
         name: ${{env.UPLOAD_NAME}}
-        path: /opt/catvod/output
+        path: /opt/urls
         retention-days: 1

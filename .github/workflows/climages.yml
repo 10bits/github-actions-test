@@ -55,7 +55,7 @@ jobs:
           output_dir=/opt/output/$filename
           mkdir -p "$output_dir"
           echo >>"$url"
-          cat "$url"|xargs -n 1 -P 4 wget -q -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
+          cat "$url"|xargs -n 1 -P 4 wget -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
           zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
         done
     - name: upload artifact

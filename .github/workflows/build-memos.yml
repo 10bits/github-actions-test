@@ -78,7 +78,7 @@ jobs:
       - name: Build backend
         run: |
           cd memos
-          go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/main.go
+          go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/memos/main.go
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

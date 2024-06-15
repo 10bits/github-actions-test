@@ -49,8 +49,8 @@ jobs:
           npm install -g pnpm
           pnpm i --frozen-lockfile
           pnpm build
-          rm -rf ../server/dist
-          mv dist ../server/
+          rm -rf ../server/router/frontend/dist
+          mv dist ../server/router/frontend/dist
 
       - name: Setup Go
         uses: actions/setup-go@v3

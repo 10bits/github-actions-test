@@ -6,7 +6,7 @@ on:
       branch: 
         description: 'memos branch'      
         required: true 
-        default: 'release/0.14.4'
+        default: 'release/0.22.2'
 
 jobs:
   build-artifacts:
@@ -78,7 +78,7 @@ jobs:
       - name: Build backend
         run: |
           cd memos
-          go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./main.go
+          go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/main.go
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2

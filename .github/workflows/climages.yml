@@ -58,7 +58,9 @@ jobs:
           #cat "$url"|xargs -n 1 -P 4 wget -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}"
           #cat "$url" | xargs -n 1 -P 4 -I {} sh -c 'wget -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}" "{}" || true'
           cat "$url" | xargs -n 1 -P 4 sh -c 'wget -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}" "$0" || true' 
-          zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
+          if [ -d "$output_dir" ]; then
+              zip -rj -0 /opt/output/"${filename}".zip "${output_dir}"
+          fi
         done
     - name: upload artifact
       uses: actions/upload-artifact@v4

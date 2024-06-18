@@ -56,7 +56,7 @@ jobs:
           mkdir -p "$output_dir"
           echo >>"$url"
           #cat "$url"|xargs -n 1 -P 4 -I {} wget -q --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "${output_dir}" {} 2>/dev/null
-          cat "$url" | xargs -t -n 1 -P 4 -I {} sh -c 'wget -nv --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P '"${output_dir}"' '{}' || true' 
+          cat "$url" | xargs -t -n 1 -P 4 -I {} sh -c 'wget -nv --timeout=8 --tries=3 -U "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36" -P "'$output_dir'" '{}' || true' 
           if [ "$(ls -A "$output_dir")" ]; then
               zip_file=/opt/output/"${filename}".zip
               zip -rj -0 "$zip_file" "${output_dir}"

@@ -11,6 +11,10 @@ on:
         description: 'Ventoy Version'      
         required: true 
         default: '1.0.99'
+      image-size: 
+        description: 'Ventoy Image Size'      
+        required: true 
+        default: '1024'
 env:
   TZ: Asia/Shanghai
   
@@ -24,22 +28,15 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - name: Show the timezone
-      run: |
-        echo "The timezone is $TZ"
-        date
-    - uses: actions/checkout@v3
     - name: run
       shell: bash
       env:
         VERSION: ${{ github.event.inputs.version }}
+        IMG_SIZE: ${{ github.event.inputs.image-size }}
       run: |
-        IMG_FILE="ventoy.img"
-        IMG_SIZE=1024 
-        VENTOY_DIR="ventoy"
         mkdir /opt/ventoy
         cd /opt/ventoy
+        IMG_FILE="ventoy-${VERSION}.img"
         echo "创建空白镜像文件 ${IMG_FILE} 大小 ${IMG_SIZE}MB..."
         dd if=/dev/zero of=${IMG_FILE} bs=1M count=${IMG_SIZE}
         echo "使用 fdisk 创建分区..."
@@ -48,6 +45,10 @@ jobs:
         echo "镜像挂载到 loop 设备: ${LOOP_DEVICE}"
         echo "格式化分区为 FAT32..."
         sudo mkfs.vfat "${LOOP_DEVICE}p1"
+        wget https://github.com/ventoy/Ventoy/releases/download/v${VERSION}/ventoy-${VERSION}-linux.tar.gz
+        tar zxvf ventoy-${VERSION}-linux.tar.gz
+        chmod +x ./ventoy-${VERSION}/Ventoy2Disk.sh
+        sudo ./ventoy-${VERSION}/Ventoy2Disk.sh -i ${LOOP_DEVICE}
         echo "卸载 loop 设备..."
         sudo losetup -d ${LOOP_DEVICE}
         echo "Ventoy 镜像创建完成: ${IMG_FILE}"
@@ -56,6 +57,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: ventoy-${{ github.event.inputs.version }}
-        path: /opt/ventoy
+        name: ventoy-${{ github.event.inputs.version }}-image
+        path: /opt/ventoy/*.img
         retention-days: 1

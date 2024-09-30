@@ -57,6 +57,6 @@ jobs:
       uses: actions/upload-artifact@v4
       if: success()
       with:
-        name: ventoy-${{ github.event.inputs.version }}-image
+        name: ventoy-${{ github.event.inputs.version }}-${{ github.event.inputs.image-size }}m-image
         path: /opt/ventoy/*.img
         retention-days: 1

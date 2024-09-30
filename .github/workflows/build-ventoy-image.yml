@@ -48,7 +48,7 @@ jobs:
         wget https://github.com/ventoy/Ventoy/releases/download/v${VERSION}/ventoy-${VERSION}-linux.tar.gz
         tar zxvf ventoy-${VERSION}-linux.tar.gz
         cd ./ventoy-${VERSION}
-        sudo ./Ventoy2Disk.sh -i -y ${LOOP_DEVICE}
+        yes | sudo ./Ventoy2Disk.sh -i ${LOOP_DEVICE} -v
         echo "卸载 loop 设备..."
         sudo losetup -d ${LOOP_DEVICE}
         echo "Ventoy 镜像创建完成: ${IMG_FILE}"

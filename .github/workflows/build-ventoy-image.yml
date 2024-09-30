@@ -47,9 +47,9 @@ jobs:
         LOOP_DEVICE=$(sudo losetup -fP --show ${IMG_FILE})
         echo "镜像挂载到 loop 设备: ${LOOP_DEVICE}"
         echo "格式化分区为 FAT32..."
-        mkfs.vfat "${LOOP_DEVICE}p1"
+        sudo mkfs.vfat "${LOOP_DEVICE}p1"
         echo "卸载 loop 设备..."
-        losetup -d ${LOOP_DEVICE}
+        sudo losetup -d ${LOOP_DEVICE}
         echo "Ventoy 镜像创建完成: ${IMG_FILE}"
         
     - name: upload artifact

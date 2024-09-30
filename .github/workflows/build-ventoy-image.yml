@@ -1,0 +1,61 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Build Ventoy Image
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  workflow_dispatch:
+    inputs: 
+      version: 
+        description: 'Ventoy Version'      
+        required: true 
+        default: '1.0.99'
+env:
+  TZ: Asia/Shanghai
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    if: github.repository_owner == github.actor
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - name: Show the timezone
+      run: |
+        echo "The timezone is $TZ"
+        date
+    - uses: actions/checkout@v3
+    - name: run
+      shell: bash
+      env:
+        VERSION: ${{ github.event.inputs.version }}
+      run: |
+        IMG_FILE="ventoy.img"
+        IMG_SIZE=1024 
+        VENTOY_DIR="ventoy"
+        mkdir /opt/ventoy
+        cd /opt/ventoy
+        echo "创建空白镜像文件 ${IMG_FILE} 大小 ${IMG_SIZE}MB..."
+        dd if=/dev/zero of=${IMG_FILE} bs=1M count=${IMG_SIZE}
+        echo "使用 fdisk 创建分区..."
+        echo -e "n\np\n1\n\n\nw" | fdisk ${IMG_FILE}
+        LOOP_DEVICE=$(losetup -fP --show ${IMG_FILE})
+        echo "镜像挂载到 loop 设备: ${LOOP_DEVICE}"
+        echo "格式化分区为 FAT32..."
+        mkfs.vfat "${LOOP_DEVICE}p1"
+        echo "卸载 loop 设备..."
+        losetup -d ${LOOP_DEVICE}
+        echo "Ventoy 镜像创建完成: ${IMG_FILE}"
+        
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: ventoy-${{ github.event.inputs.version }}
+        path: /opt/ventoy
+        retention-days: 1

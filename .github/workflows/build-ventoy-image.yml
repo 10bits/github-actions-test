@@ -44,7 +44,7 @@ jobs:
         dd if=/dev/zero of=${IMG_FILE} bs=1M count=${IMG_SIZE}
         echo "使用 fdisk 创建分区..."
         echo -e "n\np\n1\n\n\nw" | fdisk ${IMG_FILE}
-        LOOP_DEVICE=$(losetup -fP --show ${IMG_FILE})
+        LOOP_DEVICE=$(sudo losetup -fP --show ${IMG_FILE})
         echo "镜像挂载到 loop 设备: ${LOOP_DEVICE}"
         echo "格式化分区为 FAT32..."
         mkfs.vfat "${LOOP_DEVICE}p1"

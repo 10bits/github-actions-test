@@ -61,7 +61,7 @@ jobs:
 
       - name: Build backend
         run: |
-          cd memos
+          cd cflow
           go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/memos/main.go
 
       - name: Upload artifacts

@@ -65,7 +65,7 @@ jobs:
           go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/memos/main.go
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: memos-${{ matrix.goos }}-${{ matrix.goarch }}
           path: memos/memos${{ matrix.goos == 'windows' && '.exe' || '' }}

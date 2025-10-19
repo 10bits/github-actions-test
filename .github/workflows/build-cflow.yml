@@ -68,4 +68,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: memos-${{ matrix.goos }}-${{ matrix.goarch }}
-          path: memos/memos${{ matrix.goos == 'windows' && '.exe' || '' }}
+          path: cflow/memos${{ matrix.goos == 'windows' && '.exe' || '' }}

@@ -1,0 +1,72 @@
+name: Build cflow
+
+on:
+  workflow_dispatch:
+jobs:
+  build-artifacts:
+    if: github.repository_owner == github.actor
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+            
+          - goos: linux
+            goarch: arm64
+            
+          - goos: windows
+            goarch: amd64
+    env:
+      GOOS: ${{ matrix.goos }}
+      GOARCH: ${{ matrix.goarch }}
+      CGO_ENABLED: 1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+
+      - name: Build
+        run: |
+          git clone https://github.com/Vespa314/cflow.git
+          cd cflow/web
+          npm install -g pnpm
+          corepack enable && pnpm i --frozen-lockfile && pnpm type-gen
+          pnpm build
+          cd ..
+          mv ./web/dist ./server/dist
+          
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+
+      - name: Install gcc-aarch64-linux-gnu (Ubuntu ARM64)
+        if: matrix.goarch == 'arm64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
+          echo "CC=aarch64-linux-gnu-gcc" >> $GITHUB_ENV
+
+      - name: Install mingw-w64
+        if: matrix.goos == 'windows' && matrix.goarch == 'amd64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mingw-w64
+          echo "CC=x86_64-w64-mingw32-gcc" >> $GITHUB_ENV
+
+      - name: Build backend
+        run: |
+          cd memos
+          go build -o memos${{ matrix.goos == 'windows' && '.exe' || '' }} ./bin/memos/main.go
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: memos-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: memos/memos${{ matrix.goos == 'windows' && '.exe' || '' }}

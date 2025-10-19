@@ -35,7 +35,6 @@ jobs:
         run: |
           git clone https://github.com/Vespa314/cflow.git
           cd cflow/web
-          npm install -g pnpm
           corepack enable && pnpm i --frozen-lockfile && pnpm type-gen
           pnpm build
           cd ..

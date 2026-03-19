@@ -1,0 +1,72 @@
+name: Build Osmium 
+
+on:
+  workflow_dispatch:
+
+jobs:
+  compile:
+    if: github.repository_owner == github.actor
+    runs-on: windows-latest
+    steps:
+
+    - name: Checkout microsoft/vcpkg
+      uses: actions/checkout@v4
+      with:
+        repository: microsoft/vcpkg
+        path: vcpkg
+
+    - name: Checkout mapbox/protozero
+      uses: actions/checkout@v4
+      with:
+        repository: mapbox/protozero
+        path: protozero
+
+    - name: Checkout osmcode/libosmium
+      uses: actions/checkout@v4
+      with:
+        repository: osmcode/libosmium
+        path: libosmium
+
+    - name: Checkout osmcode/osmium-tool
+      uses: actions/checkout@v4
+      with:
+        repository: osmcode/osmium-tool
+        path: osmium-tool
+
+    - name: Install vcpkg
+      shell: pwsh
+      run: |
+        .\vcpkg\bootstrap-vcpkg.bat
+
+    - name: Install dependencies
+      shell: pwsh
+      run: |
+        .\vcpkg\vcpkg.exe install boost-iterator:x64-windows boost-program-options:x64-windows boost-variant:x64-windows bzip2:x64-windows expat:x64-windows lz4:x64-windows zlib:x64-windows 
+
+    - name: Setup cmake
+      uses: jwlawson/actions-setup-cmake@v1.13
+      with:
+        cmake-version: '3.16.x'
+
+    - name: Make
+      working-directory: osmium-tool
+      shell: bash
+      run: |
+        mkdir build
+        cmake -LA . -DCMAKE_TOOLCHAIN_FILE=..\vcpkg\scripts\buildsystems\vcpkg.cmake -DOsmium_DEBUG=TRUE -DPROTOZERO_INCLUDE_DIR=..\protozero\include -B build
+      env:
+       CC:   gcc
+       CXX:  g++
+
+    - name: Build
+      shell: bash
+      run: |
+        cmake --build build --config Release --verbose
+
+    - name: upload artifact
+      uses: actions/upload-artifact@v4
+      if: success()
+      with:
+        name: osmium-tool-win-x64
+        path: build
+        retention-days: 1

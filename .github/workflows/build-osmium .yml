@@ -41,12 +41,15 @@ jobs:
     - name: Install dependencies
       shell: pwsh
       run: |
-        .\vcpkg\vcpkg.exe install boost-iterator:x64-windows boost-program-options:x64-windows boost-variant:x64-windows bzip2:x64-windows expat:x64-windows lz4:x64-windows zlib:x64-windows 
-
-    - name: Setup cmake
-      uses: jwlawson/actions-setup-cmake@v1.13
-      with:
-        cmake-version: '3.31.10'
+        .\vcpkg\vcpkg.exe install ^
+          boost:x64-windows ^
+          boost-iterator:x64-windows ^
+          boost-program-options:x64-windows ^
+          boost-variant:x64-windows ^
+          bzip2:x64-windows ^
+          expat:x64-windows ^
+          lz4:x64-windows ^
+          zlib:x64-windows
 
     - name: Configure
       working-directory: osmium-tool

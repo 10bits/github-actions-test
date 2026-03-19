@@ -46,17 +46,17 @@ jobs:
     - name: Setup cmake
       uses: jwlawson/actions-setup-cmake@v1.13
       with:
-        cmake-version: '3.16.x'
+        cmake-version: '3.31.10'
 
-    - name: Make
+    - name: Configure
       working-directory: osmium-tool
-      shell: bash
+      shell: pwsh
       run: |
-        mkdir build
-        cmake -LA . -DCMAKE_TOOLCHAIN_FILE=..\vcpkg\scripts\buildsystems\vcpkg.cmake -DOsmium_DEBUG=TRUE -DPROTOZERO_INCLUDE_DIR=..\protozero\include -B build
-      env:
-       CC:   gcc
-       CXX:  g++
+        cmake -G "Visual Studio 17 2022" -A x64 `
+              -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake `
+              -DOsmium_DEBUG=TRUE `
+              -DPROTOZERO_INCLUDE_DIR=../protozero/include `
+              -B build
 
     - name: Build
       shell: bash
